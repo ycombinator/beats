@@ -36,8 +36,8 @@ import (
 
 func TestOutputReload(t *testing.T) {
 	tests := map[string]func(mockPublishFn) outputs.Client{
-		"client": newMockClient,
-		//"network_client": newMockNetworkClient,
+		"client":         newMockClient,
+		"network_client": newMockNetworkClient,
 	}
 
 	for name, ctor := range tests {
@@ -101,7 +101,7 @@ func TestOutputReload(t *testing.T) {
 
 				wg.Wait()
 
-				timeout := 5 * time.Second
+				timeout := 20 * time.Second
 				success := waitUntilTrue(timeout, func() bool {
 					return uint(numEventsToPublish) == publishedCount.Load()
 				})
@@ -112,7 +112,7 @@ func TestOutputReload(t *testing.T) {
 					)
 				}
 				return success
-			}, &quick.Config{MaxCount: 2})
+			}, &quick.Config{MaxCount: 25})
 
 			if err != nil {
 				t.Error(err)

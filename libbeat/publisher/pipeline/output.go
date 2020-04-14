@@ -86,9 +86,9 @@ func (w *worker) close() {
 	//w.lf("worker asked to close")
 	w.closed.Store(true)
 	//w.lf("w.inflight == nil: %#v", w.inflight == nil)
-	if w.inflight != nil {
-		//w.lf("waiting for inflight events to publish")
-		<-w.inflight
+	//if w.inflight != nil {
+	//	//w.lf("waiting for inflight events to publish")
+	//	<-w.inflight
 		//w.lf("inflight events published")
 	}
 }

@@ -49,6 +49,7 @@ type retryQueue chan batchEvent
 type retryerSignal struct {
 	tag     retryerEventTag
 	channel workQueue
+	done    chan struct{}
 }
 
 type batchEvent struct {
@@ -107,10 +108,13 @@ func (r *retryer) sigOutputRemoved() {
 }
 
 func (r *retryer) updOutput(ch workQueue) {
+	done := make(chan struct{})
 	r.sig <- retryerSignal{
 		tag:     sigRetryerUpdateOutput,
 		channel: ch,
+		done:    done,
 	}
+	<-done
 }
 
 func (r *retryer) retry(b *Batch) {
@@ -207,6 +211,7 @@ func (r *retryer) loop() {
 			switch sig.tag {
 			case sigRetryerUpdateOutput:
 				r.out = sig.channel
+				close(sig.done)
 			case sigRetryerOutputAdded:
 				numOutputs++
 			case sigRetryerOutputRemoved:

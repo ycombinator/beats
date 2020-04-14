@@ -147,6 +147,7 @@ func (c *outputController) Set(outGrp outputs.Group) {
 		for _, w := range c.out.outputs {
 			w.Close()
 		}
+		// TODO: remove; consumer should never block
 		for drained := false; !drained; {
 			select {
 			case b := <-c.out.workQueue:

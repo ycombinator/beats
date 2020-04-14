@@ -107,10 +107,10 @@ func (c *outputController) Close() error {
 }
 
 func (c *outputController) Set(outGrp outputs.Group) {
-	lf("set called...")
+	//lf("set called...")
 	c.setInProgress.Lock()
 	defer c.setInProgress.Unlock()
-	lf("setting output...")
+	//lf("setting output...")
 
 	// create new outputGroup with shared work queue
 	clients := outGrp.Clients
@@ -128,7 +128,7 @@ func (c *outputController) Set(outGrp outputs.Group) {
 	}
 
 	// update consumer and retryer
-	lf("pausing consumer...")
+	//lf("pausing consumer...")
 	c.consumer.sigPause()
 	if c.out != nil {
 		for range c.out.outputs {
@@ -150,10 +150,10 @@ func (c *outputController) Set(outGrp outputs.Group) {
 		for drained := false; !drained; {
 			select {
 			case b := <-c.out.workQueue:
-				lf("draining batches from old workqueue to new workqueue...")
+				//lf("draining batches from old workqueue to new workqueue...")
 				queue <- b
 			default:
-				lf("workqueue is already drained")
+				//lf("workqueue is already drained")
 				drained = true
 			}
 		}
@@ -162,7 +162,7 @@ func (c *outputController) Set(outGrp outputs.Group) {
 	c.out = grp
 
 	// restart consumer (potentially blocked by retryer)
-	lf("continuing consumer...")
+	//lf("continuing consumer...")
 	c.consumer.sigUnWait()
 	c.consumer.sigContinue()
 

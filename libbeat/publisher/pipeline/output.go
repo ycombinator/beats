@@ -77,19 +77,19 @@ func makeClientWorker(observer outputObserver, qu workQueue, client outputs.Clie
 		client: client,
 	}
 
-	worker.lf("running client worker...")
+	//worker.lf("running client worker...")
 	go c.run()
 	return c
 }
 
 func (w *worker) close() {
-	w.lf("worker asked to close")
+	//w.lf("worker asked to close")
 	w.closed.Store(true)
-	w.lf("w.inflight == nil: %#v", w.inflight == nil)
+	//w.lf("w.inflight == nil: %#v", w.inflight == nil)
 	if w.inflight != nil {
-		w.lf("waiting for inflight events to publish")
+		//w.lf("waiting for inflight events to publish")
 		<-w.inflight
-		w.lf("inflight events published")
+		//w.lf("inflight events published")
 	}
 }
 
@@ -100,7 +100,7 @@ func (w *clientWorker) Close() error {
 
 func (w *clientWorker) run() {
 	defer func() {
-		w.lf("clientWorker closed")
+		//w.lf("clientWorker closed")
 	}()
 	for !w.closed.Load() {
 		for batch := range w.qu {
@@ -108,7 +108,7 @@ func (w *clientWorker) run() {
 				continue
 			}
 
-			w.lf("clientWorker: received batch of %v events", len(batch.events))
+			//w.lf("clientWorker: received batch of %v events", len(batch.events))
 			if w.closed.Load() {
 				if batch != nil {
 					w.lf("clientWorker: canceling batch of %v events", len(batch.events))
@@ -180,10 +180,10 @@ func (w *netClientWorker) run() {
 				continue
 			}
 
-			w.lf("netClientWorker: received batch of %v events", len(batch.events))
+			//w.lf("netClientWorker: received batch of %v events", len(batch.events))
 			if w.closed.Load() {
 				if batch != nil {
-					w.lf("netClientWorker: canceling batch of %v events", len(batch.events))
+					//w.lf("netClientWorker: canceling batch of %v events", len(batch.events))
 					batch.Cancelled()
 				}
 				return

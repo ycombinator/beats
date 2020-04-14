@@ -196,10 +196,10 @@ func (r *retryer) loop() {
 				consumerBlocked = blockConsumer(numOutputs, len(buffer))
 				if !consumerBlocked {
 					log.Info("retryer: send unwait-signal to consumer")
-					lf("retryer: send unwait-signal to consumer")
+					//lf("retryer: send unwait-signal to consumer")
 					r.consumer.sigUnWait()
 					log.Info("  done")
-					lf("  done")
+					//lf("  done")
 				}
 			}
 
